@@ -19,7 +19,7 @@ export interface StoreRequest extends TokenRequest {
 }
 
 export const initToken = expressjwt({
-    secret: "A very tappy app that you can't hanlde234@#$%^",
+    secret: process.env.JWT_SECRET as string,
     algorithms: ["HS256"],
     credentialsRequired: false,
     getToken(req) {

@@ -13,7 +13,7 @@ exports.isAuth = exports.hasToken = exports.initToken = void 0;
 const express_jwt_1 = require("express-jwt");
 const storeModel_1 = require("../db/storeModel");
 exports.initToken = (0, express_jwt_1.expressjwt)({
-    secret: "A very tappy app that you can't hanlde234@#$%^",
+    secret: process.env.JWT_SECRET,
     algorithms: ["HS256"],
     credentialsRequired: false,
     getToken(req) {
