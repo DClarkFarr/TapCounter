@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import IconStopCircle from "~icons/fa-solid/stop-circle";
+import IconBackArrow from "~icons/fa-solid/arrow-alt-circle-left";
 import useCounterStore from "@/stores/useCounterStore";
 
 const counter = useCounterStore();
@@ -29,7 +30,11 @@ const counter = useCounterStore();
                     "
                 >
                     <div>
-                        <IconStopCircle class="mx-auto" />
+                        <IconStopCircle
+                            class="mx-auto"
+                            v-if="counter.view !== 'confirmEnd'"
+                        />
+                        <IconBackArrow class="mx-auto" v-else />
                     </div>
                     {{ counter.view === "app" ? "End Session" : "Go back" }}
                 </button>
