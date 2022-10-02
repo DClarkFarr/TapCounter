@@ -5,10 +5,33 @@ import Header from "./Counter/Header.vue";
 import ConfirmEnd from "./Counter/ConfirmEnd.vue";
 import WelcomeBlock from "./Counter/WelcomeBlock.vue";
 import IconCheckCircle from "~icons/fa-solid/check-circle";
+import { debounce } from "lodash";
 
 const counter = useCounterStore();
 
-const onSubmit = () => {};
+const debounceSaveState = debounce(
+    ({ name, status, items }: typeof counter) => {
+        const toSave = {
+            name,
+            status,
+            items,
+        };
+
+        localStorage.setItem("counter", JSON.stringify(toSave));
+    },
+    300
+);
+
+counter.$subscribe((mutation, state) => {
+    debounceSaveState(state as typeof counter);
+});
+
+const onSubmit = () => {
+    counter.addItem({
+        name: counter.input,
+        quantity: 1,
+    });
+};
 
 const handleInputChange = (e: Event) => {
     const target = e.target as HTMLInputElement;
@@ -17,8 +40,6 @@ const handleInputChange = (e: Event) => {
     if (value.length > 4) {
         value = value.slice(0, 4);
     }
-
-    console.log("setting", value);
 
     counter.setInput(value);
 };
