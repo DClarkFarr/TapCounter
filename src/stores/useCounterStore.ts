@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const useCounterStore = defineStore("counter", () => {
     const status = ref<"active" | "inactive">("inactive");
@@ -8,6 +8,16 @@ const useCounterStore = defineStore("counter", () => {
     const startedAt = ref<DateTime>();
 
     const view = ref<"app" | "confirmEnd">("app");
+
+    const input = ref("");
+
+    const inputValid = computed(() => {
+        return input.value.length >= 4;
+    });
+
+    const setInput = (value: string) => {
+        input.value = value;
+    };
 
     const startSession = (sessionName: string) => {
         view.value = "app";
@@ -35,6 +45,9 @@ const useCounterStore = defineStore("counter", () => {
         view,
         confirmEndSession,
         endSession,
+        input,
+        setInput,
+        inputValid,
     };
 });
 
