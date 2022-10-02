@@ -1,4 +1,4 @@
-import { ObjectId, WithId } from "mongodb";
+import { WithId } from "mongodb";
 import { getMongoDb } from "./connect";
 export interface StoreFields {
     name: string;

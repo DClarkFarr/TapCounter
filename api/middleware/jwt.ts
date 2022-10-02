@@ -1,6 +1,6 @@
-import { getStoreByCode, StoreDocument } from "db/storeModel";
 import { NextFunction, Request, Response } from "express";
 import { expressjwt } from "express-jwt";
+import { getStoreByCode, StoreDocument } from "../db/storeModel";
 
 export type TokenBody = {
     storeCode: string;
@@ -58,12 +58,14 @@ export const isAuth = async (
     next: NextFunction
 ) => {
     if (!req.auth?.storeCode) {
-        return res.status(401).send("Store code required");
+        res.status(401).send("Store code required");
+        return;
     }
 
     const store = await getStoreByCode(req.auth.storeCode);
     if (!store) {
-        return res.status(401).send("Invalid store code");
+        res.status(401).send("Invalid store code");
+        return;
     }
 
     req.store = store;
