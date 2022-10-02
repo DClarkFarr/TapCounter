@@ -4,8 +4,10 @@ import MobileLayout from "./Layout/MobileLayout.vue";
 import Header from "./Counter/Header.vue";
 import ConfirmEnd from "./Counter/ConfirmEnd.vue";
 import WelcomeBlock from "./Counter/WelcomeBlock.vue";
-import IconCheckCircle from "~icons/fa-solid/check-circle";
+
 import { debounce } from "lodash";
+import CounterItem from "./Counter/CounterItem.vue";
+import AddItemForm from "./Counter/AddItemForm.vue";
 
 const counter = useCounterStore();
 
@@ -25,24 +27,6 @@ const debounceSaveState = debounce(
 counter.$subscribe((mutation, state) => {
     debounceSaveState(state as typeof counter);
 });
-
-const onSubmit = () => {
-    counter.addItem({
-        name: counter.input,
-        quantity: 1,
-    });
-};
-
-const handleInputChange = (e: Event) => {
-    const target = e.target as HTMLInputElement;
-
-    let value = target.value.trim();
-    if (value.length > 4) {
-        value = value.slice(0, 4);
-    }
-
-    counter.setInput(value);
-};
 </script>
 
 <template>
@@ -52,48 +36,33 @@ const handleInputChange = (e: Event) => {
         </template>
 
         <template v-if="counter.status === 'active'">
-            <template v-if="counter.view === 'app'"></template>
+            <template v-if="counter.view === 'app'">
+                <div class="grid gap-1">
+                    <CounterItem
+                        v-for="(item, index) in counter.filteredItems"
+                        :item="item"
+                        :key="`${item.name}-${index}`"
+                        :selected="
+                            counter.filteredItemsLastAddedIndex === index
+                        "
+                        :expand="counter.longPressedIndex === index"
+                    />
+                </div>
+            </template>
             <ConfirmEnd v-else-if="counter.view === 'confirmEnd'" />
         </template>
         <WelcomeBlock v-else-if="counter.status === 'inactive'" />
 
         <template #footer>
             <div v-if="counter.status === 'active' && counter.view === 'app'">
-                <div class="add-item-form">
-                    <form
-                        action=""
-                        class=""
-                        @submit.prevent="onSubmit"
-                        method="POST"
-                    >
-                        <div class="flex gap-x-2 items-center">
-                            <div class="grow">
-                                <input
-                                    class="input input-lg text-gray-500 focus:text-gray-700"
-                                    placeholder="Item # (Last 4 digits)"
-                                    type="number"
-                                    v-model="counter.input"
-                                    @input="handleInputChange"
-                                />
-                            </div>
-                            <div>
-                                <button
-                                    type="submit"
-                                    class="btn btn-lg bg-sky-700"
-                                    :disabled="!counter.inputValid"
-                                >
-                                    <div class="flex items-center py-[5px]">
-                                        <IconCheckCircle class="mr-2" />
-                                        <span class="leading-none">
-                                            Add Item
-                                        </span>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <AddItemForm />
             </div>
         </template>
     </MobileLayout>
 </template>
+
+<style lang="scss" scoped>
+.grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+</style>

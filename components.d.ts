@@ -8,8 +8,10 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     About: typeof import('./src/components/pages/About.vue')['default']
+    AddItemForm: typeof import('./src/components/Counter/AddItemForm.vue')['default']
     ConfirmEnd: typeof import('./src/components/Counter/ConfirmEnd.vue')['default']
     Counter: typeof import('./src/components/Counter.vue')['default']
+    CounterItem: typeof import('./src/components/Counter/CounterItem.vue')['default']
     CreateForm: typeof import('./src/components/Counter/CreateForm.vue')['default']
     Header: typeof import('./src/components/Counter/Header.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
