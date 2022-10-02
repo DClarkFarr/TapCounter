@@ -42,9 +42,9 @@ const handleInputChange = (e: Event) => {
                         class="btn btn-lg bg-sky-700"
                         :disabled="!counter.inputValid"
                     >
-                        <div class="flex items-center py-[5px]">
+                        <div class="flex items-center py-[5px] -mx-2">
                             <IconCheckCircle class="mr-2" />
-                            <span class="leading-none"> Add Item </span>
+                            <span class="leading-none text-xs"> Add Item </span>
                         </div>
                     </button>
                 </div>
