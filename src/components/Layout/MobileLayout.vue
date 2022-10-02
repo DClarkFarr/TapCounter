@@ -15,7 +15,7 @@ const hasFooter = computed(() => {
 
 <template>
     <div
-        class="mobile-layout mx-auto max-w-4xl mx-auto bg-sky-200 h-screen flex flex-col"
+        class="mobile-layout mx-auto max-w-4xl mx-auto bg-sky-200 h-full flex flex-col"
     >
         <div
             class="mobile-layout__header p-4 bg-sky-700 text-white shrink"
@@ -44,3 +44,11 @@ const hasFooter = computed(() => {
         </div>
     </div>
 </template>
+
+<style lang="scss">
+html,
+body,
+#app {
+    height: 100%;
+}
+</style>
