@@ -8,12 +8,15 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     About: typeof import('./src/components/pages/About.vue')['default']
+    ConfirmEnd: typeof import('./src/components/Counter/ConfirmEnd.vue')['default']
     Counter: typeof import('./src/components/Counter.vue')['default']
     CreateForm: typeof import('./src/components/Counter/CreateForm.vue')['default']
+    Header: typeof import('./src/components/Counter/Header.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     Home: typeof import('./src/components/pages/Home.vue')['default']
     MobileLayout: typeof import('./src/components/Layout/MobileLayout.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    WelcomeBlock: typeof import('./src/components/Counter/WelcomeBlock.vue')['default']
   }
 }

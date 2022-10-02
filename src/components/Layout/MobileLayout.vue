@@ -1,10 +1,16 @@
 <script lang="ts" setup>
-import { useSlots } from "vue";
+import { computed, useSlots } from "vue";
 
 const slots = useSlots();
 
-const hasHeader = slots.header !== undefined;
-const hasFooter = slots.footer !== undefined;
+const hasHeader = computed(() => {
+    const children = slots.header?.();
+    return typeof children?.[0].children === "object";
+});
+const hasFooter = computed(() => {
+    const children = slots.footer?.();
+    return typeof children?.[0].children === "object";
+});
 </script>
 
 <template>

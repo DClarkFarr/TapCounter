@@ -10,6 +10,7 @@ const useCounterStore = defineStore("counter", () => {
     const view = ref<"app" | "confirmEnd">("app");
 
     const startSession = (sessionName: string) => {
+        view.value = "app";
         name.value = sessionName;
         startedAt.value = DateTime.local();
         status.value = "active";
@@ -19,7 +20,22 @@ const useCounterStore = defineStore("counter", () => {
         view.value = status ? "confirmEnd" : "app";
     };
 
-    return { status, name, startedAt, startSession, view, confirmEndSession };
+    const endSession = () => {
+        console.log("ending session");
+        status.value = "inactive";
+        name.value = "";
+        startedAt.value = undefined;
+    };
+
+    return {
+        status,
+        name,
+        startedAt,
+        startSession,
+        view,
+        confirmEndSession,
+        endSession,
+    };
 });
 
 export default useCounterStore;
