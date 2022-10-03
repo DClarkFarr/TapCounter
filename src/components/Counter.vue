@@ -5,7 +5,6 @@ import Header from "./Counter/Header.vue";
 import ConfirmEnd from "./Counter/ConfirmEnd.vue";
 import WelcomeBlock from "./Counter/WelcomeBlock.vue";
 
-import { debounce } from "lodash";
 import CounterItem from "./Counter/CounterItem.vue";
 import AddItemForm from "./Counter/AddItemForm.vue";
 
