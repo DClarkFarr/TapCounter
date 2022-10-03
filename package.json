@@ -10,6 +10,9 @@
     },
     "dependencies": {
         "@vueuse/core": "^9.3.0",
+        "axios": "^0.27.2",
+        "jsonwebtoken": "^8.5.1",
+        "jwt-decode": "^3.1.2",
         "lodash": "^4.17.21",
         "luxon": "^3.0.4",
         "pinia": "^2.0.22",
@@ -21,6 +24,7 @@
         "@iconify-json/fa-brands": "^1.1.2",
         "@iconify-json/fa-regular": "^1.1.2",
         "@iconify-json/fa-solid": "^1.1.2",
+        "@types/jsonwebtoken": "^8.5.9",
         "@types/lodash": "^4.14.186",
         "@types/luxon": "^3.0.1",
         "@vitejs/plugin-vue": "^3.1.0",

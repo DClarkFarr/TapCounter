@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import useCounterStore from "@/stores/useCounterStore";
 import MobileLayout from "./Layout/MobileLayout.vue";
-import Header from "./Counter/Header.vue";
 import ConfirmEnd from "./Counter/ConfirmEnd.vue";
 import WelcomeBlock from "./Counter/WelcomeBlock.vue";
 
 import CounterItem from "./Counter/CounterItem.vue";
 import AddItemForm from "./Counter/AddItemForm.vue";
+import CreateForm from "./Counter/CreateForm.vue";
+import CounterHeader from "./Counter/CounterHeader.vue";
 
 const counter = useCounterStore();
 </script>
@@ -14,7 +15,7 @@ const counter = useCounterStore();
 <template>
     <MobileLayout>
         <template #header>
-            <Header />
+            <CounterHeader />
         </template>
 
         <template v-if="counter.status === 'active'">
@@ -33,7 +34,9 @@ const counter = useCounterStore();
             </template>
             <ConfirmEnd v-else-if="counter.view === 'confirmEnd'" />
         </template>
-        <WelcomeBlock v-else-if="counter.status === 'inactive'" />
+        <WelcomeBlock v-else-if="counter.status === 'inactive'">
+            <CreateForm class="mx-auto" />
+        </WelcomeBlock>
 
         <template #footer>
             <div v-if="counter.status === 'active' && counter.view === 'app'">
