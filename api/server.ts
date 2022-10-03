@@ -1,9 +1,11 @@
 import app from "./utils/app";
-
-import authRoutes from "./routes/auth";
 import { getMongoClient } from "./db/connect";
 
+import authRoutes from "./routes/auth";
+import storeRoutes from "./routes/store";
+
 app.use("/auth", authRoutes);
+app.use("/store", storeRoutes);
 
 const port = process.env.PORT;
 
