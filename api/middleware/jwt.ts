@@ -59,8 +59,6 @@ export const isAuth = async (
 ) => {
     const r = req as TokenMaybeStoreRequest;
 
-    console.log("got auth", r.auth);
-
     if (!r.auth?.selectedStore) {
         res.status(401).send("Store code required");
         return;
