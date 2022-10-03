@@ -14,7 +14,11 @@ const express_1 = require("express");
 const router = (0, express_1.Router)();
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const collection = yield (0, storeModel_1.getStoreCollection)();
-    const stores = yield collection.find({}).toArray();
-    res.json({ stores });
+    const stores = yield collection
+        .find({
+        deletedAt: null,
+    })
+        .toArray();
+    res.json({ stores: stores.map((s) => (0, storeModel_1.toSafeObject)(s)) });
 }));
 exports.default = router;

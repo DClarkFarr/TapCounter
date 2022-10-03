@@ -3,7 +3,7 @@ import { getMongoDb } from "./connect";
 export interface StoreFields {
     name: string;
     code: string;
-    deletedAt?: string;
+    deletedAt: Date | null;
 }
 
 export type StoreDocument = WithId<StoreFields>;
@@ -16,4 +16,13 @@ export const getStoreCollection = async () => {
 export const getStoreByCode = async (code: string) => {
     const collection = await getStoreCollection();
     return collection.findOne({ code });
+};
+
+export const toSafeObject = (doc: StoreDocument) => {
+    const obj = {
+        id: doc._id.toString(),
+        name: doc.name,
+    };
+
+    return obj;
 };

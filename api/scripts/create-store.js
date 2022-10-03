@@ -31,6 +31,7 @@ const createStore = async function () {
         const result = await collection.insertOne({
             name: args.name,
             code: args.code,
+            deletedAt: null,
         });
 
         console.log("created", result);

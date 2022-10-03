@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStoreByCode = exports.getStoreCollection = void 0;
+exports.toSafeObject = exports.getStoreByCode = exports.getStoreCollection = void 0;
 const connect_1 = require("./connect");
 const getStoreCollection = () => __awaiter(void 0, void 0, void 0, function* () {
     const db = yield (0, connect_1.getMongoDb)();
@@ -21,3 +21,11 @@ const getStoreByCode = (code) => __awaiter(void 0, void 0, void 0, function* () 
     return collection.findOne({ code });
 });
 exports.getStoreByCode = getStoreByCode;
+const toSafeObject = (doc) => {
+    const obj = {
+        id: doc._id.toString(),
+        name: doc.name,
+    };
+    return obj;
+};
+exports.toSafeObject = toSafeObject;
