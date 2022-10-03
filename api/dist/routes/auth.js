@@ -18,11 +18,12 @@ const mongodb_1 = require("mongodb");
 const jwt_1 = require("../middleware/jwt");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const router = (0, express_1.Router)();
-router.get("/", jwt_1.initToken, jwt_1.isAuth, (req, res) => {
+router.get("/", jwt_1.initToken, jwt_1.isAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const r = req;
     res.json({
-        message: "Hello from auth",
+        store: (0, storeModel_1.toSafeObject)(r.store),
     });
-});
+}));
 router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const r = req;
     if (!r.body.id || !r.body.code) {

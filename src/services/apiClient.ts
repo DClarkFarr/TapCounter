@@ -10,7 +10,6 @@ export const initClient = () => {
     const authStore = useAuthStore();
 
     apiClient.interceptors.request.use((config) => {
-        console.log("auth store token", authStore.token);
         const token = authStore.token;
         if (!config.headers) {
             config.headers = {};

@@ -1,6 +1,6 @@
 import { debounce } from "lodash";
 import { defineStore } from "pinia";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 import { StoreItem } from "@/types/StoreTypes";
 import apiClient from "@/services/apiClient";
@@ -71,6 +71,8 @@ const useAuthStore = defineStore("auth", () => {
         setToken,
         payload,
         ready,
+        selectedStore,
+        loadSelectedStore,
     };
 });
 

@@ -14,7 +14,7 @@ const auth = useAuthStore();
 
                 <div>
                     <div class="font-semibold text-xl text-center">
-                        [Store Name]
+                        {{ auth.selectedStore?.name || "Store Name" }}
                     </div>
                     <div class="font-light text-lg text-center opacity-[0.75]">
                         Tap Counter

@@ -1,14 +1,21 @@
-import { getStoreCollection } from "../db/storeModel";
+import { getStoreCollection, toSafeObject } from "../db/storeModel";
 import { Router, Request, Response } from "express";
 import { ObjectId } from "mongodb";
-import { initToken, isAuth, TokenRequest } from "../middleware/jwt";
+import {
+    initToken,
+    isAuth,
+    StoreRequest,
+    TokenRequest,
+} from "../middleware/jwt";
 import jwt from "jsonwebtoken";
 
 const router = Router();
 
-router.get("/", initToken, isAuth, (req: Request, res: Response) => {
+router.get("/", initToken, isAuth, async (req: Request, res: Response) => {
+    const r = req as StoreRequest;
+
     res.json({
-        message: "Hello from auth",
+        store: toSafeObject(r.store),
     });
 });
 
