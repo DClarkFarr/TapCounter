@@ -8,6 +8,21 @@ dotenv.config();
 const app: Express = express();
 
 app.use(bodyParser.json());
-app.use(cors());
+
+const whitelist = [process.env.CORS_ORIGIN];
+app.use(
+    cors({
+        origin(origin, callback) {
+            if (whitelist.indexOf(origin) !== -1) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS"));
+            }
+        },
+        // origin: true,
+        credentials: true,
+        exposedHeaders: ["x-token"],
+    })
+);
 
 export default app;

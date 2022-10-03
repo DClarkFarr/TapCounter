@@ -23,7 +23,7 @@ const onSubmit = () => {
             id: selected.value,
             code: codeInput.value,
         })
-        .then(() => {
+        .then((response) => {
             codeInput.value = "";
         })
         .catch((err) => {

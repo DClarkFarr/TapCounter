@@ -18,9 +18,7 @@ const useAuthStore = defineStore("auth", () => {
     const payload = computed(() => {
         let selectedStore = "";
         if (token.value) {
-            console.log("decoding", token.value);
             const decoded = jwtDecode<AuthPayload>(token.value);
-            console.log("got decoded", decoded);
             if (decoded) {
                 selectedStore = decoded?.selectedStore;
             }

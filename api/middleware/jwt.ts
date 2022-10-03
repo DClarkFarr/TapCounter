@@ -3,7 +3,7 @@ import { expressjwt } from "express-jwt";
 import { getStoreByCode, StoreDocument } from "../db/storeModel";
 
 export type TokenBody = {
-    storeCode: string;
+    selectedStore: string;
 };
 
 export interface TokenRequest extends Request {
@@ -57,12 +57,12 @@ export const isAuth = async (
     res: Response,
     next: NextFunction
 ) => {
-    if (!req.auth?.storeCode) {
+    if (!req.auth?.selectedStore) {
         res.status(401).send("Store code required");
         return;
     }
 
-    const store = await getStoreByCode(req.auth.storeCode);
+    const store = await getStoreByCode(req.auth.selectedStore);
     if (!store) {
         res.status(401).send("Invalid store code");
         return;

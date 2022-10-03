@@ -42,11 +42,11 @@ exports.hasToken = hasToken;
  */
 const isAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    if (!((_a = req.auth) === null || _a === void 0 ? void 0 : _a.storeCode)) {
+    if (!((_a = req.auth) === null || _a === void 0 ? void 0 : _a.selectedStore)) {
         res.status(401).send("Store code required");
         return;
     }
-    const store = yield (0, storeModel_1.getStoreByCode)(req.auth.storeCode);
+    const store = yield (0, storeModel_1.getStoreByCode)(req.auth.selectedStore);
     if (!store) {
         res.status(401).send("Invalid store code");
         return;
