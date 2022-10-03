@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toSafeObject = exports.getStoreByCode = exports.getStoreCollection = void 0;
+exports.toSafeObject = exports.getStoreById = exports.getStoreByCode = exports.getStoreCollection = void 0;
+const mongodb_1 = require("mongodb");
 const connect_1 = require("./connect");
 const getStoreCollection = () => __awaiter(void 0, void 0, void 0, function* () {
     const db = yield (0, connect_1.getMongoDb)();
@@ -21,6 +22,11 @@ const getStoreByCode = (code) => __awaiter(void 0, void 0, void 0, function* () 
     return collection.findOne({ code });
 });
 exports.getStoreByCode = getStoreByCode;
+const getStoreById = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const collection = yield (0, exports.getStoreCollection)();
+    return collection.findOne({ _id: new mongodb_1.ObjectId(id) });
+});
+exports.getStoreById = getStoreById;
 const toSafeObject = (doc) => {
     const obj = {
         id: doc._id.toString(),

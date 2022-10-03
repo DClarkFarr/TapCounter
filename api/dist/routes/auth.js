@@ -15,10 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const storeModel_1 = require("../db/storeModel");
 const express_1 = require("express");
 const mongodb_1 = require("mongodb");
+const jwt_1 = require("../middleware/jwt");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const router = (0, express_1.Router)();
-router.get("/", (req, res) => {
-    res.send("Express + TypeScript Server");
+router.get("/", jwt_1.initToken, jwt_1.isAuth, (req, res) => {
+    res.json({
+        message: "Hello from auth",
+    });
 });
 router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const r = req;

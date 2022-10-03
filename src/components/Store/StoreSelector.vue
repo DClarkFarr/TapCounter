@@ -1,8 +1,11 @@
 <script lang="ts" setup>
-import { Store } from "@/types/StoreTypes";
+import { StoreItem } from "@/types/StoreTypes";
 import { computed, onMounted, ref } from "vue";
 import apiClient from "@/services/apiClient";
 
+const emit = defineEmits<{
+    (e: "selected"): void;
+}>();
 const selected = ref("");
 const message = ref("");
 
@@ -11,7 +14,7 @@ const onSelectStore = (e: Event) => {
     selected.value = target.value;
 };
 
-const stores = ref<Store[]>([]);
+const stores = ref<StoreItem[]>([]);
 
 const codeInput = ref("");
 
@@ -23,8 +26,9 @@ const onSubmit = () => {
             id: selected.value,
             code: codeInput.value,
         })
-        .then((response) => {
+        .then(() => {
             codeInput.value = "";
+            emit("selected");
         })
         .catch((err) => {
             message.value = err.response.data.message || err.message;
@@ -39,7 +43,7 @@ const isValid = computed(() => {
 });
 
 onMounted(() => {
-    apiClient.get<{ stores: Store[] }>("/store").then((response) => {
+    apiClient.get<{ stores: StoreItem[] }>("/store").then((response) => {
         stores.value = response.data.stores;
     });
 });

@@ -6,8 +6,10 @@ import jwt from "jsonwebtoken";
 
 const router = Router();
 
-router.get("/", (req: Request, res: Response) => {
-    res.send("Express + TypeScript Server");
+router.get("/", initToken, isAuth, (req: Request, res: Response) => {
+    res.json({
+        message: "Hello from auth",
+    });
 });
 
 router.post("/", async (req, res) => {

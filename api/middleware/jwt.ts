@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { expressjwt } from "express-jwt";
-import { getStoreByCode, StoreDocument } from "../db/storeModel";
+import { getStoreById, StoreDocument } from "../db/storeModel";
 
 export type TokenBody = {
     selectedStore: string;
@@ -53,22 +53,26 @@ export const hasToken = (
  * Token must contain a valid store code
  */
 export const isAuth = async (
-    req: TokenMaybeStoreRequest,
+    req: Request,
     res: Response,
     next: NextFunction
 ) => {
-    if (!req.auth?.selectedStore) {
+    const r = req as TokenMaybeStoreRequest;
+
+    console.log("got auth", r.auth);
+
+    if (!r.auth?.selectedStore) {
         res.status(401).send("Store code required");
         return;
     }
 
-    const store = await getStoreByCode(req.auth.selectedStore);
+    const store = await getStoreById(r.auth.selectedStore);
     if (!store) {
-        res.status(401).send("Invalid store code");
+        res.status(401).send("Invalid store id");
         return;
     }
 
-    req.store = store;
+    r.store = store;
 
     next();
 };
