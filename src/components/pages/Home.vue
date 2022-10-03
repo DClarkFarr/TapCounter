@@ -1,8 +1,3 @@
-<script lang="ts" setup>
-import HomeIcon from "~icons/fa-solid/home";
-import Counter from "../Counter.vue";
-</script>
+<script lang="ts" setup></script>
 
-<template>
-    <Counter />
-</template>
+<template>Home!</template>

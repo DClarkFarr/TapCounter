@@ -10,23 +10,6 @@ import CounterItem from "./Counter/CounterItem.vue";
 import AddItemForm from "./Counter/AddItemForm.vue";
 
 const counter = useCounterStore();
-
-const debounceSaveState = debounce(
-    ({ name, status, items }: typeof counter) => {
-        const toSave = {
-            name,
-            status,
-            items,
-        };
-
-        localStorage.setItem("counter", JSON.stringify(toSave));
-    },
-    300
-);
-
-counter.$subscribe((mutation, state) => {
-    debounceSaveState(state as typeof counter);
-});
 </script>
 
 <template>

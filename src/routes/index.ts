@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
-import About from "@/components/pages/About.vue";
 import Home from "@/components/pages/Home.vue";
+import Counter from "@/components/pages/Counter.vue";
 const routes = [
     { path: "/", component: Home },
-    { path: "/about", component: About },
+    { path: "/counter", component: Counter },
 ];
 
 // 3. Create the router instance and pass the `routes` option
