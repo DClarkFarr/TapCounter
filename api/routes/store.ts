@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { ObjectId } from "mongodb";
+import { pick } from "lodash";
 import {
     getStoreCollection,
     toSafeObject as toSafeStore,
@@ -13,6 +14,9 @@ import { initToken, isAuth, StoreRequest } from "../middleware/jwt";
 
 const router = Router();
 
+/**
+ * Get Stores list
+ */
 router.get("/", async (req, res) => {
     const collection = await getStoreCollection();
 
@@ -25,6 +29,9 @@ router.get("/", async (req, res) => {
     res.json({ stores: stores.map((s) => toSafeStore(s)) });
 });
 
+/**
+ * Get active store batches
+ */
 router.get("/batch", initToken, isAuth, async (req, res) => {
     const r = req as StoreRequest;
 
@@ -46,6 +53,9 @@ router.get("/batch", initToken, isAuth, async (req, res) => {
     res.json({ batches: batches.map((b) => toSafeBatch(b)) });
 });
 
+/**
+ * Create a new batch for authenticated store
+ */
 router.post("/batch", initToken, isAuth, async (req, res) => {
     const r = req as StoreRequest;
 
@@ -90,6 +100,9 @@ router.post("/batch", initToken, isAuth, async (req, res) => {
     res.json({ batch: toSafeBatch(found) });
 });
 
+/**
+ * Get batch of active store
+ */
 router.get("/batch/:id", initToken, isAuth, async (req, res) => {
     const r = req as StoreRequest;
 
@@ -106,6 +119,42 @@ router.get("/batch/:id", initToken, isAuth, async (req, res) => {
     }
 
     res.json({ batch: toSafeBatch(found) });
+});
+
+/**
+ * Update batch of active store
+ */
+router.put("/batch/:id", initToken, isAuth, async (req, res) => {
+    const r = req as StoreRequest;
+
+    const collection = await getBatchCollection();
+
+    const found = await collection.findOne({
+        _id: new ObjectId(req.params.id),
+        storeId: new ObjectId(r.auth.selectedStore),
+    });
+
+    if (!found) {
+        res.status(404).json({ error: "Batch not found" });
+        return;
+    }
+
+    const toUpdate: Partial<BatchFields> = {
+        ...pick(req.body, ["items", "completedAt"]),
+    };
+
+    const updated = await collection.findOneAndUpdate(
+        {
+            _id: found._id,
+        },
+        {
+            $set: toUpdate,
+        }
+    );
+
+    res.json({
+        updated: true,
+    });
 });
 
 export default router;

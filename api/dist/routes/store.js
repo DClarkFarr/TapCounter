@@ -11,10 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const mongodb_1 = require("mongodb");
+const lodash_1 = require("lodash");
 const storeModel_1 = require("../db/storeModel");
 const batchModel_1 = require("../db/batchModel");
 const jwt_1 = require("../middleware/jwt");
 const router = (0, express_1.Router)();
+/**
+ * Get Stores list
+ */
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const collection = yield (0, storeModel_1.getStoreCollection)();
     const stores = yield collection
@@ -24,6 +28,9 @@ router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         .toArray();
     res.json({ stores: stores.map((s) => (0, storeModel_1.toSafeObject)(s)) });
 }));
+/**
+ * Get active store batches
+ */
 router.get("/batch", jwt_1.initToken, jwt_1.isAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const r = req;
     const collection = yield (0, batchModel_1.getBatchCollection)();
@@ -38,6 +45,9 @@ router.get("/batch", jwt_1.initToken, jwt_1.isAuth, (req, res) => __awaiter(void
         .toArray();
     res.json({ batches: batches.map((b) => (0, batchModel_1.toSafeObject)(b)) });
 }));
+/**
+ * Create a new batch for authenticated store
+ */
 router.post("/batch", jwt_1.initToken, jwt_1.isAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const r = req;
     const toCreate = {
@@ -70,6 +80,9 @@ router.post("/batch", jwt_1.initToken, jwt_1.isAuth, (req, res) => __awaiter(voi
     });
     res.json({ batch: (0, batchModel_1.toSafeObject)(found) });
 }));
+/**
+ * Get batch of active store
+ */
 router.get("/batch/:id", jwt_1.initToken, jwt_1.isAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const r = req;
     const collection = yield (0, batchModel_1.getBatchCollection)();
@@ -82,5 +95,29 @@ router.get("/batch/:id", jwt_1.initToken, jwt_1.isAuth, (req, res) => __awaiter(
         return;
     }
     res.json({ batch: (0, batchModel_1.toSafeObject)(found) });
+}));
+/**
+ * Update batch of active store
+ */
+router.put("/batch/:id", jwt_1.initToken, jwt_1.isAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const r = req;
+    const collection = yield (0, batchModel_1.getBatchCollection)();
+    const found = yield collection.findOne({
+        _id: new mongodb_1.ObjectId(req.params.id),
+        storeId: new mongodb_1.ObjectId(r.auth.selectedStore),
+    });
+    if (!found) {
+        res.status(404).json({ error: "Batch not found" });
+        return;
+    }
+    const toUpdate = Object.assign({}, (0, lodash_1.pick)(req.body, ["items", "completedAt"]));
+    const updated = yield collection.findOneAndUpdate({
+        _id: found._id,
+    }, {
+        $set: toUpdate,
+    });
+    res.json({
+        updated: true,
+    });
 }));
 exports.default = router;

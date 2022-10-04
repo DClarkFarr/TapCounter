@@ -13,6 +13,7 @@ export type Item = {
 export type Status = "active" | "inactive";
 
 const useCounterStore = defineStore("counter", () => {
+    const batchId = ref<string>();
     const completedAt = ref<DateTime | null>(null);
     const createdAt = ref<DateTime>();
     const items = ref<Item[]>([]);
@@ -86,6 +87,8 @@ const useCounterStore = defineStore("counter", () => {
         lastAddedIndex.value = items.value.findIndex(
             (i) => i.name === data.name
         );
+
+        saveItems();
     };
 
     let sortItems = () => {
@@ -100,6 +103,7 @@ const useCounterStore = defineStore("counter", () => {
             items.value = [...items.value];
             lastAddedIndex.value = foundIndex;
         }
+        saveItems();
     };
 
     const setLongPressed = (name: string) => {
@@ -110,6 +114,7 @@ const useCounterStore = defineStore("counter", () => {
     };
 
     const loadById = (id: string) => {
+        batchId.value = id;
         isLoading.value = true;
 
         apiClient
@@ -131,6 +136,12 @@ const useCounterStore = defineStore("counter", () => {
             .finally(() => {
                 isLoading.value = false;
             });
+    };
+
+    const saveItems = () => {
+        apiClient.put(`/store/batch/${batchId.value}`, {
+            items: items.value,
+        });
     };
 
     return {
