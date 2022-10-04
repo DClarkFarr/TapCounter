@@ -6,7 +6,7 @@ import List from "@/components/pages/List.vue";
 const routes = [
     { path: "/", component: Home },
     { path: "/list", component: List },
-    { path: "/counter", component: Counter },
+    { path: "/counter/:batchId", component: Counter },
 ];
 
 // 3. Create the router instance and pass the `routes` option

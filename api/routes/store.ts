@@ -73,6 +73,20 @@ router.post("/batch", initToken, isAuth, async (req, res) => {
         return;
     }
 
+    collection.updateMany(
+        {
+            _id: {
+                $ne: found._id,
+            },
+            completedAt: null,
+        },
+        {
+            $set: {
+                completedAt: new Date(),
+            },
+        }
+    );
+
     res.json({ batch: toSafeBatch(found) });
 });
 

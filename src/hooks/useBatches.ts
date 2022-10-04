@@ -58,7 +58,13 @@ export const useBatches = () => {
                 : null,
         };
 
-        batches.value = [batch, ...batches.value];
+        batches.value = [
+            batch,
+            ...batches.value.map((b) => ({
+                ...b,
+                completedAt: DateTime.now(),
+            })),
+        ];
 
         return batch;
     };

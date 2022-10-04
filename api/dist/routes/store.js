@@ -58,6 +58,16 @@ router.post("/batch", jwt_1.initToken, jwt_1.isAuth, (req, res) => __awaiter(voi
         res.status(500).json({ error: "Failed to retrieve batch" });
         return;
     }
+    collection.updateMany({
+        _id: {
+            $ne: found._id,
+        },
+        completedAt: null,
+    }, {
+        $set: {
+            completedAt: new Date(),
+        },
+    });
     res.json({ batch: (0, batchModel_1.toSafeObject)(found) });
 }));
 exports.default = router;

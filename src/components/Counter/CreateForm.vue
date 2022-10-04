@@ -2,6 +2,7 @@
 import { DateTime } from "luxon";
 import { computed, ref } from "vue";
 import IconCircleNotch from "~icons/fa-solid/circle-notch";
+import IconPlus from "~icons/fa-solid/plus";
 
 const emit = defineEmits<{
     (event: "create", payload: { name: string }, resolve: () => void): void;
@@ -28,25 +29,31 @@ const isValid = computed(() => {
 </script>
 
 <template>
-    <div class="create-form">
+    <div class="create-form text-gray-600">
         <form method="POST" action="" @submit.prevent="onSubmit">
             <div class="flex gap-x-2 items-end w-full">
                 <div class="text-left grow">
-                    <label>Batch Name</label>
                     <div>
-                        <input class="input" v-model="name" />
+                        <input
+                            class="input"
+                            v-model="name"
+                            placeholder="Batch Name"
+                        />
                     </div>
                 </div>
                 <div>
                     <button
                         type="submit"
-                        class="btn bg-emerald-700"
+                        class="btn bg-emerald-700 flex items-center"
                         :disabled="!isValid || isSubmitting"
                     >
                         <template v-if="isSubmitting">
                             <IconCircleNotch class="animate-spin h-4 w-4" />
                         </template>
-                        <template v-else> Create </template>
+                        <template v-else>
+                            <IconPlus class="h-4 w-4 mr-2" />
+                            Batch
+                        </template>
                     </button>
                 </div>
             </div>
