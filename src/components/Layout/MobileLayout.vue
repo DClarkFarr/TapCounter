@@ -5,11 +5,17 @@ const slots = useSlots();
 
 const hasHeader = computed(() => {
     const children = slots.header?.();
-    return typeof children?.[0].children === "object";
+    return (
+        (children && children?.length > 1) ||
+        typeof children?.[0].children === "object"
+    );
 });
 const hasFooter = computed(() => {
     const children = slots.footer?.();
-    return typeof children?.[0].children === "object";
+    return (
+        (children && children?.length > 1) ||
+        typeof children?.[0].children === "object"
+    );
 });
 </script>
 

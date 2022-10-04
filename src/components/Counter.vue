@@ -2,11 +2,9 @@
 import useCounterStore from "@/stores/useCounterStore";
 import MobileLayout from "./Layout/MobileLayout.vue";
 import ConfirmEnd from "./Counter/ConfirmEnd.vue";
-import WelcomeBlock from "./Counter/WelcomeBlock.vue";
 
 import CounterItem from "./Counter/CounterItem.vue";
 import AddItemForm from "./Counter/AddItemForm.vue";
-import CreateForm from "./Counter/CreateForm.vue";
 import CounterHeader from "./Counter/CounterHeader.vue";
 
 const counter = useCounterStore();
@@ -18,28 +16,21 @@ const counter = useCounterStore();
             <CounterHeader />
         </template>
 
-        <template v-if="counter.status === 'active'">
-            <template v-if="counter.view === 'app'">
-                <div class="grid gap-1">
-                    <CounterItem
-                        v-for="(item, index) in counter.filteredItems"
-                        :item="item"
-                        :key="`${item.name}-${index}`"
-                        :selected="
-                            counter.filteredItemsLastAddedIndex === index
-                        "
-                        :expand="counter.longPressedIndex === index"
-                    />
-                </div>
-            </template>
-            <ConfirmEnd v-else-if="counter.view === 'confirmEnd'" />
+        <template v-if="counter.view === 'app'">
+            <div class="grid gap-1">
+                <CounterItem
+                    v-for="(item, index) in counter.filteredItems"
+                    :item="item"
+                    :key="`${item.name}-${index}`"
+                    :selected="counter.filteredItemsLastAddedIndex === index"
+                    :expand="counter.longPressedIndex === index"
+                />
+            </div>
         </template>
-        <WelcomeBlock v-else-if="counter.status === 'inactive'">
-            <CreateForm class="mx-auto" />
-        </WelcomeBlock>
+        <ConfirmEnd v-else-if="counter.view === 'confirmEnd'" />
 
         <template #footer>
-            <div v-if="counter.status === 'active' && counter.view === 'app'">
+            <div v-if="counter.view === 'app'">
                 <AddItemForm />
             </div>
         </template>

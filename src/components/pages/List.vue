@@ -30,7 +30,7 @@ const onCreate = (data: { name: string }, resolve: () => void) => {
                         {{ auth.selectedStore?.name || "Store Name" }}
                     </div>
                     <div class="font-light text-lg text-center opacity-[0.75]">
-                        Tap Counter
+                        Loads
                     </div>
                 </div>
             </Header>
