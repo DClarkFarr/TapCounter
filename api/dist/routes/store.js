@@ -70,4 +70,17 @@ router.post("/batch", jwt_1.initToken, jwt_1.isAuth, (req, res) => __awaiter(voi
     });
     res.json({ batch: (0, batchModel_1.toSafeObject)(found) });
 }));
+router.get("/batch/:id", jwt_1.initToken, jwt_1.isAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const r = req;
+    const collection = yield (0, batchModel_1.getBatchCollection)();
+    const found = yield collection.findOne({
+        _id: new mongodb_1.ObjectId(req.params.id),
+        storeId: new mongodb_1.ObjectId(r.auth.selectedStore),
+    });
+    if (!found) {
+        res.status(404).json({ error: "Batch not found" });
+        return;
+    }
+    res.json({ batch: (0, batchModel_1.toSafeObject)(found) });
+}));
 exports.default = router;

@@ -90,4 +90,22 @@ router.post("/batch", initToken, isAuth, async (req, res) => {
     res.json({ batch: toSafeBatch(found) });
 });
 
+router.get("/batch/:id", initToken, isAuth, async (req, res) => {
+    const r = req as StoreRequest;
+
+    const collection = await getBatchCollection();
+
+    const found = await collection.findOne({
+        _id: new ObjectId(req.params.id),
+        storeId: new ObjectId(r.auth.selectedStore),
+    });
+
+    if (!found) {
+        res.status(404).json({ error: "Batch not found" });
+        return;
+    }
+
+    res.json({ batch: toSafeBatch(found) });
+});
+
 export default router;

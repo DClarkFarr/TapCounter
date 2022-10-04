@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { watch } from "vue";
 import useCounterStore from "@/stores/useCounterStore";
 import MobileLayout from "./Layout/MobileLayout.vue";
 import ConfirmEnd from "./Counter/ConfirmEnd.vue";
@@ -7,7 +8,19 @@ import CounterItem from "./Counter/CounterItem.vue";
 import AddItemForm from "./Counter/AddItemForm.vue";
 import CounterHeader from "./Counter/CounterHeader.vue";
 
+const props = defineProps<{
+    batchId: string;
+}>();
+
 const counter = useCounterStore();
+
+watch(
+    () => props.batchId,
+    (batchId) => {
+        counter.loadById(batchId);
+    },
+    { immediate: true }
+);
 </script>
 
 <template>

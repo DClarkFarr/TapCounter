@@ -2,6 +2,8 @@ import { DateTime } from "luxon";
 import { defineStore } from "pinia";
 import { computed, reactive, ref } from "vue";
 import { orderBy } from "lodash";
+import apiClient from "@/services/apiClient";
+import { Batch } from "@/types/BatchTypes";
 
 export type Item = {
     name: string;
@@ -11,27 +13,10 @@ export type Item = {
 export type Status = "active" | "inactive";
 
 const useCounterStore = defineStore("counter", () => {
-    let initialStatus: Status = "inactive";
-    let initialItems: Item[] = [];
-    let initialName = "";
-
-    let storage = localStorage.getItem("counter");
-    if (storage?.length) {
-        const tempState: {
-            name: string;
-            items: Item[];
-            status: Status;
-        } = JSON.parse(storage);
-
-        initialStatus = tempState.status;
-        initialItems = tempState.items.map((i) =>
-            reactive({ ...i, quantity: Number(i.quantity) })
-        );
-        initialName = tempState.name;
-    }
-
-    const status = ref<Status>(initialStatus);
-    const name = ref(initialName);
+    const completedAt = ref<DateTime | null>(null);
+    const createdAt = ref<DateTime>();
+    const items = ref<Item[]>([]);
+    const name = ref("");
 
     const view = ref<"app" | "confirmEnd">("app");
 
@@ -41,7 +26,7 @@ const useCounterStore = defineStore("counter", () => {
 
     const longPressedIndex = ref(-1);
 
-    const items = ref<Item[]>(initialItems);
+    const isLoading = ref(false);
 
     const filteredItems = computed(() => {
         if (!input.value) {
@@ -74,7 +59,6 @@ const useCounterStore = defineStore("counter", () => {
     };
 
     const endSession = () => {
-        status.value = "inactive";
         name.value = "";
         items.value = [];
         longPressedIndex.value = -1;
@@ -125,8 +109,34 @@ const useCounterStore = defineStore("counter", () => {
         }
     };
 
+    const loadById = (id: string) => {
+        isLoading.value = true;
+
+        apiClient
+            .get<{ batch: Batch<string> }>(`/store/batch/${id}`)
+            .then(({ data }) => ({
+                ...data.batch,
+                createdAt: DateTime.fromISO(data.batch.createdAt),
+                completedAt: data.batch.completedAt
+                    ? DateTime.fromISO(data.batch.completedAt)
+                    : null,
+            }))
+            .then((batch) => {
+                name.value = batch.name;
+                createdAt.value = batch.createdAt;
+                completedAt.value = batch.completedAt;
+                items.value = batch.items;
+                sortItems();
+            })
+            .finally(() => {
+                isLoading.value = false;
+            });
+    };
+
     return {
-        status,
+        completedAt,
+        createdAt,
+        isLoading,
         name,
         view,
         confirmEndSession,
@@ -142,6 +152,7 @@ const useCounterStore = defineStore("counter", () => {
         longPressedIndex,
         setLongPressed,
         filteredItemsLastAddedIndex,
+        loadById,
     };
 });
 
