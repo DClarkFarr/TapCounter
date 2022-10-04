@@ -43,7 +43,6 @@ exports.hasToken = hasToken;
 const isAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const r = req;
-    console.log("got auth", r.auth);
     if (!((_a = r.auth) === null || _a === void 0 ? void 0 : _a.selectedStore)) {
         res.status(401).send("Store code required");
         return;
