@@ -23,6 +23,6 @@ const auth = useAuthStore();
             </Header>
         </template>
 
-        list stuff here...
+        <div class="store-list"></div>
     </MobileLayout>
 </template>
