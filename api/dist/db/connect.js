@@ -20,6 +20,8 @@ function createIndexes(client) {
         yield Promise.all([
             db.collection("stores").createIndex({ code: 1 }),
             db.collection("stores").createIndex({ deletedAt: 1 }),
+            db.collection("batches").createIndex({ storeId: 1 }),
+            db.collection("batches").createIndex({ storeId: -1 }),
         ]);
         indexesCreated = true;
         return client;

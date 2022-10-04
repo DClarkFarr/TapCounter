@@ -7,6 +7,8 @@ async function createIndexes(client: MongoClient) {
     await Promise.all([
         db.collection("stores").createIndex({ code: 1 }),
         db.collection("stores").createIndex({ deletedAt: 1 }),
+        db.collection("batches").createIndex({ storeId: 1 }),
+        db.collection("batches").createIndex({ storeId: -1 }),
     ]);
     indexesCreated = true;
     return client;

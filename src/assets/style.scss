@@ -16,7 +16,7 @@
     }
 
     .btn {
-        @apply cursor-pointer px-4 py-2 rounded text-white hover:brightness-75 disabled:bg-gray-500 disabled:text-white border-none;
+        @apply cursor-pointer px-6 py-[13px] leading-none rounded text-white hover:brightness-75 disabled:bg-gray-500 disabled:text-white border-none;
     }
 
     .btn-sm {

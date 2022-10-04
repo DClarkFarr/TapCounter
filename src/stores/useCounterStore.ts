@@ -69,12 +69,6 @@ const useCounterStore = defineStore("counter", () => {
         input.value = value;
     };
 
-    const startSession = (sessionName: string) => {
-        view.value = "app";
-        name.value = sessionName;
-        status.value = "active";
-    };
-
     const confirmEndSession = (status: boolean) => {
         view.value = status ? "confirmEnd" : "app";
     };
@@ -134,7 +128,6 @@ const useCounterStore = defineStore("counter", () => {
     return {
         status,
         name,
-        startSession,
         view,
         confirmEndSession,
         endSession,

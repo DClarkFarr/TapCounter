@@ -26,15 +26,15 @@ const useAuthStore = defineStore("auth", () => {
     const selectedStore = ref<StoreItem | null>();
 
     const payload = computed(() => {
-        let selectedStore = "";
+        let sStore = "";
         if (token.value) {
             const decoded = jwtDecode<AuthPayload>(token.value);
             if (decoded) {
-                selectedStore = decoded?.selectedStore;
+                sStore = decoded?.selectedStore;
             }
         }
 
-        return { selectedStore };
+        return { selectedStore: sStore };
     });
 
     const loadSelectedStore = () => {
