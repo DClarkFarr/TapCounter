@@ -2,6 +2,7 @@
 import Header from "../Layout/Header.vue";
 import IconStopCircle from "~icons/fa-solid/stop-circle";
 import IconBackArrow from "~icons/fa-solid/arrow-alt-circle-left";
+import IconArrowLeft from "~icons/fa-solid/arrow-left";
 import useCounterStore from "@/stores/useCounterStore";
 import useAuthStore from "@/stores/useAuthStore";
 
@@ -13,11 +14,24 @@ const auth = useAuthStore();
     <Header>
         <template #iconLeft>
             <div v-if="counter.view === 'app'">
-                <div class="text-xs opacity-[0.85] text-white">
-                    Session Name
-                </div>
-                <div>
-                    {{ counter.name }}
+                <div class="flex gap-x-2 items-center">
+                    <div>
+                        <RouterLink
+                            to="/list"
+                            class="btn btn-sm bg-gray-800 hover:bg-gray-900 flex gap-x-1"
+                        >
+                            <IconArrowLeft class="w-4" />
+                            Back
+                        </RouterLink>
+                    </div>
+                    <div>
+                        <div class="text-xs opacity-[0.85] text-white">
+                            Session Name
+                        </div>
+                        <div>
+                            {{ counter.name }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </template>

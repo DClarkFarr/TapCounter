@@ -47,6 +47,14 @@ const useCounterStore = defineStore("counter", () => {
         return filteredItems.value.findIndex((i) => i.name === item.name);
     });
 
+    const filteredItemsLongPressedIndex = computed(() => {
+        if (longPressedIndex.value === -1) {
+            return -1;
+        }
+        const item = items.value[longPressedIndex.value];
+        return filteredItems.value.findIndex((i) => i.name === item.name);
+    });
+
     const inputValid = computed(() => {
         return input.value.length >= 4;
     });
@@ -157,12 +165,13 @@ const useCounterStore = defineStore("counter", () => {
         inputValid,
         addItem,
         items,
-        filteredItems,
         lastAddedIndex,
-        updateItem,
         longPressedIndex,
-        setLongPressed,
+        filteredItems,
         filteredItemsLastAddedIndex,
+        filteredItemsLongPressedIndex,
+        updateItem,
+        setLongPressed,
         loadById,
     };
 });

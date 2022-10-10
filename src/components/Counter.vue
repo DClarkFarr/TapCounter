@@ -36,7 +36,7 @@ watch(
                     :item="item"
                     :key="`${item.name}-${index}`"
                     :selected="counter.filteredItemsLastAddedIndex === index"
-                    :expand="counter.longPressedIndex === index"
+                    :expand="counter.filteredItemsLongPressedIndex === index"
                 />
             </div>
         </template>
