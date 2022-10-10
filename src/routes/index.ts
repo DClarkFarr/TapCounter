@@ -2,11 +2,13 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/components/pages/Home.vue";
 import Counter from "@/components/pages/Counter.vue";
 import List from "@/components/pages/List.vue";
+import BatchDetails from "@/components/pages/BatchDetails.vue";
 
 const routes = [
     { path: "/", component: Home },
     { path: "/list", component: List },
     { path: "/counter/:batchId", component: Counter },
+    { path: "/items/:batchId", component: BatchDetails },
 ];
 
 // 3. Create the router instance and pass the `routes` option

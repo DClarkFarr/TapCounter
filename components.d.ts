@@ -9,7 +9,9 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     About: typeof import('./src/components/pages/About.vue')['default']
     AddItemForm: typeof import('./src/components/Counter/AddItemForm.vue')['default']
+    BatchDetails: typeof import('./src/components/pages/BatchDetails.vue')['default']
     ConfirmEnd: typeof import('./src/components/Counter/ConfirmEnd.vue')['default']
+    copy: typeof import('./src/components/pages/Counter copy.vue')['default']
     Counter: typeof import('./src/components/Counter.vue')['default']
     CounterHeader: typeof import('./src/components/Counter/CounterHeader.vue')['default']
     CounterItem: typeof import('./src/components/Counter/CounterItem.vue')['default']
