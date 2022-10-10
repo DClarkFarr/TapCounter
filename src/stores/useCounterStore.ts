@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { defineStore } from "pinia";
-import { computed, reactive, ref } from "vue";
+import { computed, ref } from "vue";
 import { orderBy } from "lodash";
 import apiClient from "@/services/apiClient";
 import { Batch } from "@/types/BatchTypes";
