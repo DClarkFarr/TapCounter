@@ -4,12 +4,11 @@ var socket = io(import.meta.env.VITE_SOCKET_ENDPOINT, {
 });
 
 const initSocket = () => {
-    console.log("initting");
     socket.on("connect", () => {
-        console.log("a user connected");
+        // console.log("a user connected");
     });
     socket.on("disconnect", () => {
-        console.log("user disconnected");
+        // console.log("user disconnected");
     });
 };
 export { socket, initSocket };

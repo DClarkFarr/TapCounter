@@ -15,6 +15,7 @@ const lodash_1 = require("lodash");
 const storeModel_1 = require("../db/storeModel");
 const batchModel_1 = require("../db/batchModel");
 const jwt_1 = require("../middleware/jwt");
+const socket_1 = require("../utils/socket");
 const router = (0, express_1.Router)();
 /**
  * Get Stores list
@@ -78,6 +79,7 @@ router.post("/batch", jwt_1.initToken, jwt_1.isAuth, (req, res) => __awaiter(voi
             completedAt: new Date(),
         },
     });
+    (0, socket_1.emitBatchCreated)(r.auth.selectedStore, found);
     res.json({ batch: (0, batchModel_1.toSafeObject)(found) });
 }));
 /**
@@ -111,11 +113,16 @@ router.put("/batch/:id", jwt_1.initToken, jwt_1.isAuth, (req, res) => __awaiter(
         return;
     }
     const toUpdate = Object.assign({}, (0, lodash_1.pick)(req.body, ["items", "completedAt"]));
-    const updated = yield collection.findOneAndUpdate({
+    const { value: batch } = yield collection.findOneAndUpdate({
         _id: found._id,
     }, {
         $set: toUpdate,
+    }, {
+        returnDocument: "after",
     });
+    if (batch) {
+        (0, socket_1.emitBatchChanged)(r.auth.selectedStore, batch);
+    }
     res.json({
         updated: true,
     });
@@ -137,7 +144,12 @@ router.post("/batch/:id/complete", jwt_1.initToken, jwt_1.isAuth, (req, res) => 
         $set: {
             completedAt: new Date(),
         },
+    }, {
+        returnDocument: "after",
     });
+    if (batch) {
+        (0, socket_1.emitBatchChanged)(r.auth.selectedStore, batch);
+    }
     res.json({
         updated: true,
         batch: (0, batchModel_1.toSafeObject)(batch),

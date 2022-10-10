@@ -62,7 +62,6 @@ const useAuthStore = defineStore("auth", () => {
     };
 
     watch(payload, () => {
-        console.log("watching payload");
         if (
             payload.value.selectedStore &&
             selectedStore.value?.id !== payload.value.selectedStore

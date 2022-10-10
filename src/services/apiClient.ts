@@ -30,9 +30,7 @@ export const initClient = (router: Router) => {
         },
         (err) => {
             if (err.response.status === 401) {
-                console.log("trying to logout");
                 authStore.logout();
-                console.log("got router", router);
                 router.push("/");
             }
 

@@ -6,6 +6,7 @@ import IconCircleNotch from "~icons/fa-solid/circle-notch";
 import CreateForm from "../Counter/CreateForm.vue";
 import IconEye from "~icons/fa-solid/eye";
 import IconPencil from "~icons/fa-solid/pencil-alt";
+import useSocket from "@/hooks/useSocket";
 
 const auth = useAuthStore();
 
@@ -16,6 +17,26 @@ const onCreate = (data: { name: string }, resolve: () => void) => {
         resolve();
     });
 };
+
+const socket = useSocket();
+
+socket.onStoreEvent({
+    onUpdate: (batch) => {
+        const index = batches.value.findIndex((b) => b.id === batch.id);
+        console.log("got updated batch", batch, index);
+        if (index > -1) {
+            const bs = [...batches.value];
+            bs.splice(index, 1, batch);
+            batches.value = bs;
+        }
+    },
+    onCreate: (batch) => {
+        const index = batches.value.findIndex((b) => b.id === batch.id);
+        if (index === -1) {
+            batches.value = [batch, ...batches.value];
+        }
+    },
+});
 </script>
 
 <template>

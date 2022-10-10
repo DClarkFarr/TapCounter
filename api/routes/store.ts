@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ObjectId } from "mongodb";
+import { Batch, ObjectId } from "mongodb";
 import { pick } from "lodash";
 import {
     getStoreCollection,
@@ -12,6 +12,7 @@ import {
     toSafeObject as toSafeBatch,
 } from "../db/batchModel";
 import { initToken, isAuth, StoreRequest } from "../middleware/jwt";
+import { emitBatchChanged, emitBatchCreated } from "../utils/socket";
 
 const router = Router();
 
@@ -98,6 +99,8 @@ router.post("/batch", initToken, isAuth, async (req, res) => {
         }
     );
 
+    emitBatchCreated(r.auth.selectedStore, found);
+
     res.json({ batch: toSafeBatch(found) });
 });
 
@@ -144,14 +147,21 @@ router.put("/batch/:id", initToken, isAuth, async (req, res) => {
         ...pick(req.body, ["items", "completedAt"]),
     };
 
-    const updated = await collection.findOneAndUpdate(
+    const { value: batch } = await collection.findOneAndUpdate(
         {
             _id: found._id,
         },
         {
             $set: toUpdate,
+        },
+        {
+            returnDocument: "after",
         }
     );
+
+    if (batch) {
+        emitBatchChanged(r.auth.selectedStore, batch);
+    }
 
     res.json({
         updated: true,
@@ -181,8 +191,15 @@ router.post("/batch/:id/complete", initToken, isAuth, async (req, res) => {
             $set: {
                 completedAt: new Date(),
             },
+        },
+        {
+            returnDocument: "after",
         }
     );
+
+    if (batch) {
+        emitBatchChanged(r.auth.selectedStore, batch);
+    }
 
     res.json({
         updated: true,

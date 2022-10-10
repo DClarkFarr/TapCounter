@@ -1,3 +1,4 @@
+import { toBatch } from "@/methods/batch";
 import { Item } from "@/stores/useCounterStore";
 import { Batch } from "@/types/BatchTypes";
 import { DateTime } from "luxon";
@@ -13,13 +14,7 @@ export default class BatchService {
     static getBatch(batchId: string) {
         return apiClient
             .get<{ batch: Batch<string> }>(`/store/batch/${batchId}`)
-            .then(({ data }) => ({
-                ...data.batch,
-                createdAt: DateTime.fromISO(data.batch.createdAt),
-                completedAt: data.batch.completedAt
-                    ? DateTime.fromISO(data.batch.completedAt)
-                    : null,
-            }));
+            .then(({ data }) => toBatch(data.batch));
     }
 
     static saveItems(batchId: string, items: Item[]) {
@@ -31,15 +26,7 @@ export default class BatchService {
     static getBatches() {
         return apiClient
             .get<{ batches: Batch<string>[] }>("/store/batch")
-            .then(({ data: { batches } }) =>
-                batches.map((b) => ({
-                    ...b,
-                    createdAt: DateTime.fromISO(b.createdAt),
-                    completedAt: b.completedAt
-                        ? DateTime.fromISO(b.completedAt)
-                        : null,
-                }))
-            );
+            .then(({ data: { batches } }) => batches.map((b) => toBatch(b)));
     }
 
     static async createBatch(data: { name: string }) {
