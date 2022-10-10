@@ -29,7 +29,7 @@ const useAuthStore = defineStore("auth", () => {
 
     const payload = computed(() => {
         let sStore = "";
-        console.log("looking at", token.value);
+
         if (token.value) {
             const decoded = jwtDecode<AuthPayload>(token.value);
             if (decoded) {

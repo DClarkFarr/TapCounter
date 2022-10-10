@@ -5,6 +5,7 @@ import router from "./routes";
 import { createPinia } from "pinia";
 import { initClient } from "./services/apiClient";
 import { initAuthStore } from "./stores/useAuthStore";
+import { initSocket } from "./services/socketIo";
 
 const pinia = createPinia();
 const app = createApp(App);
@@ -16,6 +17,7 @@ app.mount("#app");
 
 initClient(router);
 initAuthStore();
+initSocket();
 
 window.addEventListener("load", function () {
     setTimeout(function () {
