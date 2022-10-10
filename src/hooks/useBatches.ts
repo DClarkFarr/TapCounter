@@ -1,4 +1,4 @@
-import apiClient from "@/services/apiClient";
+import BatchService from "@/services/BatchService";
 import useAuthStore from "@/stores/useAuthStore";
 import { Batch } from "@/types/BatchTypes";
 import { DateTime } from "luxon";
@@ -18,17 +18,7 @@ export const useBatches = () => {
 
         isLoading.value = true;
 
-        loadingPromise.value = apiClient
-            .get<{ batches: Batch<string>[] }>("/store/batch")
-            .then(({ data: { batches } }) =>
-                batches.map((b) => ({
-                    ...b,
-                    createdAt: DateTime.fromISO(b.createdAt),
-                    completedAt: b.completedAt
-                        ? DateTime.fromISO(b.completedAt)
-                        : null,
-                }))
-            );
+        loadingPromise.value = BatchService.getBatches();
 
         loadingPromise.value
             .then((bs) => {
@@ -43,20 +33,7 @@ export const useBatches = () => {
     };
 
     const createBatch = async (data: { name: string }) => {
-        const {
-            data: { batch: dbBatch },
-        } = await apiClient.post<{ batch: Batch<string> }>(
-            "/store/batch",
-            data
-        );
-
-        const batch: Batch = {
-            ...dbBatch,
-            createdAt: DateTime.fromISO(dbBatch.createdAt),
-            completedAt: dbBatch.completedAt
-                ? DateTime.fromISO(dbBatch.completedAt)
-                : null,
-        };
+        const batch = await BatchService.createBatch(data);
 
         batches.value = [
             batch,

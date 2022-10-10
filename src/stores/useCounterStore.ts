@@ -2,8 +2,7 @@ import { DateTime } from "luxon";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { orderBy } from "lodash";
-import apiClient from "@/services/apiClient";
-import { Batch } from "@/types/BatchTypes";
+import BatchService from "@/services/BatchService";
 
 export type Item = {
     name: string;
@@ -68,11 +67,8 @@ const useCounterStore = defineStore("counter", () => {
     };
 
     const endSession = () => {
-        return apiClient
-            .post<{ batch: Batch<string> }>(
-                `/store/batch/${batchId.value}/complete`
-            )
-            .then((res) => {
+        return BatchService.completeBatch(batchId.value as string).then(
+            (res) => {
                 batchId.value = undefined;
                 completedAt.value = null;
                 createdAt.value = undefined;
@@ -82,7 +78,8 @@ const useCounterStore = defineStore("counter", () => {
                 longPressedIndex.value = -1;
                 lastAddedIndex.value = -1;
                 return res;
-            });
+            }
+        );
     };
 
     const addItem = (data: { name: string; quantity: number }) => {
@@ -135,15 +132,7 @@ const useCounterStore = defineStore("counter", () => {
         batchId.value = id;
         isLoading.value = true;
 
-        apiClient
-            .get<{ batch: Batch<string> }>(`/store/batch/${id}`)
-            .then(({ data }) => ({
-                ...data.batch,
-                createdAt: DateTime.fromISO(data.batch.createdAt),
-                completedAt: data.batch.completedAt
-                    ? DateTime.fromISO(data.batch.completedAt)
-                    : null,
-            }))
+        BatchService.getBatch(id)
             .then((batch) => {
                 name.value = batch.name;
                 createdAt.value = batch.createdAt;
@@ -157,9 +146,7 @@ const useCounterStore = defineStore("counter", () => {
     };
 
     const saveItems = () => {
-        apiClient.put(`/store/batch/${batchId.value}`, {
-            items: items.value,
-        });
+        BatchService.saveItems(batchId.value as string, items.value);
     };
 
     return {
