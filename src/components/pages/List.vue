@@ -23,7 +23,6 @@ const socket = useSocket();
 socket.onStoreEvent({
     onUpdate: (batch) => {
         const index = batches.value.findIndex((b) => b.id === batch.id);
-        console.log("got updated batch", batch, index);
         if (index > -1) {
             const bs = [...batches.value];
             bs.splice(index, 1, batch);

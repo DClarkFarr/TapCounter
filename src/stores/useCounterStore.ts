@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { orderBy } from "lodash";
 import BatchService from "@/services/BatchService";
+import { Batch } from "@/types/BatchTypes";
 
 export type Item = {
     name: string;
@@ -13,8 +14,8 @@ export type Status = "active" | "inactive";
 
 const useCounterStore = defineStore("counter", () => {
     const batchId = ref<string>();
-    const completedAt = ref<DateTime | null>(null);
     const createdAt = ref<DateTime>();
+    const completedAt = ref<DateTime | null>(null);
     const items = ref<Item[]>([]);
     const name = ref("");
 
@@ -149,7 +150,18 @@ const useCounterStore = defineStore("counter", () => {
         BatchService.saveItems(batchId.value as string, items.value);
     };
 
+    const updateBatchFromSocket = (b: Batch) => {
+        completedAt.value = b.completedAt;
+        items.value = b.items;
+        name.value = b.name;
+        lastAddedIndex.value = -1;
+        longPressedIndex.value = -1;
+
+        sortItems();
+    };
+
     return {
+        batchId,
         completedAt,
         createdAt,
         isLoading,
@@ -170,6 +182,7 @@ const useCounterStore = defineStore("counter", () => {
         updateItem,
         setLongPressed,
         loadById,
+        updateBatchFromSocket,
     };
 });
 

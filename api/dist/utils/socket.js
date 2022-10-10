@@ -22,6 +22,7 @@ const initSocketIo = (server) => {
 exports.initSocketIo = initSocketIo;
 const emitBatchChanged = (storeId, batch) => {
     io.emit(`${storeId} batch update`, (0, batchModel_1.toSafeObject)(batch));
+    io.emit(`${storeId} ${batch._id.toString()} update`, (0, batchModel_1.toSafeObject)(batch));
 };
 exports.emitBatchChanged = emitBatchChanged;
 const emitBatchCreated = (storeId, batch) => {
