@@ -1,4 +1,7 @@
 import { io } from "socket.io-client";
+
+console.log("got vite socket endpoint", import.meta.env.VITE_SOCKET_ENDPOINT);
+
 var socket = io(import.meta.env.VITE_SOCKET_ENDPOINT, {
     // withCredentials: true,
 });
