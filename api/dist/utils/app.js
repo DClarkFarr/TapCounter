@@ -15,7 +15,7 @@ const useCors = () => {
     const whitelist = [process.env.CORS_ORIGIN];
     app.use((0, cors_1.default)({
         origin(origin, callback) {
-            if (whitelist.indexOf(origin) !== -1) {
+            if (whitelist.indexOf(origin) !== -1 || origin === undefined) {
                 callback(null, true);
             }
             else {
