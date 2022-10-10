@@ -68,11 +68,21 @@ const useCounterStore = defineStore("counter", () => {
     };
 
     const endSession = () => {
-        name.value = "";
-        items.value = [];
-        longPressedIndex.value = -1;
-        lastAddedIndex.value = -1;
-        localStorage.removeItem("counter");
+        return apiClient
+            .post<{ batch: Batch<string> }>(
+                `/store/batch/${batchId.value}/complete`
+            )
+            .then((res) => {
+                batchId.value = undefined;
+                completedAt.value = null;
+                createdAt.value = undefined;
+                view.value = "app";
+                name.value = "";
+                items.value = [];
+                longPressedIndex.value = -1;
+                lastAddedIndex.value = -1;
+                return res;
+            });
     };
 
     const addItem = (data: { name: string; quantity: number }) => {

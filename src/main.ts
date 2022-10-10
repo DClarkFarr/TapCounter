@@ -14,7 +14,7 @@ app.use(pinia);
 
 app.mount("#app");
 
-initClient();
+initClient(router);
 initAuthStore();
 
 window.addEventListener("load", function () {

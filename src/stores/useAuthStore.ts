@@ -12,11 +12,13 @@ export interface AuthPayload extends JwtPayload {
 const useAuthStore = defineStore("auth", () => {
     const isReady = ref(false);
 
-    const { token: initialToken = "" } = JSON.parse(
-        localStorage.getItem("token") || ""
-    ) || {
-        token: "",
-    };
+    const storageToken = localStorage.getItem("token") || "";
+
+    const { token: initialToken = "" } = storageToken.length
+        ? JSON.parse(storageToken)
+        : {
+              token: "",
+          };
 
     const token = ref(initialToken);
     const setToken = (newToken: string) => {
@@ -27,6 +29,7 @@ const useAuthStore = defineStore("auth", () => {
 
     const payload = computed(() => {
         let sStore = "";
+        console.log("looking at", token.value);
         if (token.value) {
             const decoded = jwtDecode<AuthPayload>(token.value);
             if (decoded) {
@@ -54,6 +57,10 @@ const useAuthStore = defineStore("auth", () => {
         }
     };
 
+    const logout = () => {
+        setToken("");
+    };
+
     watch(payload, () => {
         console.log("watching payload");
         if (
@@ -71,6 +78,7 @@ const useAuthStore = defineStore("auth", () => {
         setToken,
         payload,
         ready,
+        logout,
         selectedStore,
         loadSelectedStore,
     };

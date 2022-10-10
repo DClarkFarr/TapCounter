@@ -44,7 +44,7 @@ const isAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
     var _a;
     const r = req;
     if (!((_a = r.auth) === null || _a === void 0 ? void 0 : _a.selectedStore)) {
-        res.status(401).send("Store code required");
+        res.status(401).json({ message: "Store code required" });
         return;
     }
     const store = yield (0, storeModel_1.getStoreById)(r.auth.selectedStore);
