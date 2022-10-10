@@ -14,7 +14,7 @@ export const useCors = () => {
     app.use(
         cors({
             origin(origin, callback) {
-                if (whitelist.indexOf(origin) !== -1) {
+                if (whitelist.indexOf(origin) !== -1 || origin === undefined) {
                     callback(null, true);
                 } else {
                     callback(new Error("Not allowed by CORS"));
