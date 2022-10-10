@@ -6,6 +6,7 @@ import {
     toSafeObject as toSafeStore,
 } from "../db/storeModel";
 import {
+    BatchDocument,
     BatchFields,
     getBatchCollection,
     toSafeObject as toSafeBatch,
@@ -154,6 +155,38 @@ router.put("/batch/:id", initToken, isAuth, async (req, res) => {
 
     res.json({
         updated: true,
+    });
+});
+
+router.post("/batch/:id/complete", initToken, isAuth, async (req, res) => {
+    const r = req as StoreRequest;
+
+    const collection = await getBatchCollection();
+
+    const found = await collection.findOne({
+        _id: new ObjectId(req.params.id),
+        storeId: new ObjectId(r.auth.selectedStore),
+    });
+
+    if (!found) {
+        res.status(404).json({ error: "Batch not found" });
+        return;
+    }
+
+    const { value: batch } = await collection.findOneAndUpdate(
+        {
+            _id: found._id,
+        },
+        {
+            $set: {
+                completedAt: new Date(),
+            },
+        }
+    );
+
+    res.json({
+        updated: true,
+        batch: toSafeBatch(batch as BatchDocument),
     });
 });
 

@@ -1,7 +1,15 @@
 <script lang="ts" setup>
 import useCounterStore from "@/stores/useCounterStore";
+import { useRouter } from "vue-router";
 
 const counter = useCounterStore();
+const router = useRouter();
+
+const onEndSession = () => {
+    counter.endSession().then(() => {
+        router.push("/list");
+    });
+};
 </script>
 
 <template>
@@ -9,7 +17,7 @@ const counter = useCounterStore();
         <div class="pb-[100px]">
             <h1 class="font-bold text-3xl mb-4">Really end session?</h1>
 
-            <button class="btn bg-emerald-700" @click="counter.endSession">
+            <button class="btn bg-emerald-700" @click="onEndSession">
                 Yes, end session
             </button>
         </div>
