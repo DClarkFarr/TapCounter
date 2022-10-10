@@ -1,9 +1,10 @@
 import { DateTime } from "luxon";
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { orderBy } from "lodash";
 import BatchService from "@/services/BatchService";
 import { Batch } from "@/types/BatchTypes";
+import { useWindowFocus } from "@vueuse/core";
 
 export type Item = {
     name: string;
@@ -159,6 +160,17 @@ const useCounterStore = defineStore("counter", () => {
 
         sortItems();
     };
+
+    const focused = useWindowFocus();
+    console.log("setting focused");
+    watch(focused, (isFocused) => {
+        console.log("focus watch", isFocused, batchId.value);
+        if (isFocused && batchId.value) {
+            BatchService.getBatch(batchId.value).then((batch) => {
+                updateBatchFromSocket(batch);
+            });
+        }
+    });
 
     return {
         batchId,
